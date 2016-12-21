@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<LOG_ROOT>
+	<PROJECT NAME="speccy2010">
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|SoundMixer:U11_L|lpm_mult:Mult0" CBX_FILE_NAME="mult_o5t.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|SoundMixer:U11_R|lpm_mult:Mult2" CBX_FILE_NAME="mult_o5t.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|ps2fifo:U05|fifo:U01|altsyncram:buff_rtl_0" CBX_FILE_NAME="altsyncram_2lg1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|vencode:U03|lpm_mult:Mult3|multcore:mult_core|mpar_add:padder|lpm_add_sub:adder[0]" CBX_FILE_NAME="add_sub_2ch.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|SoundMixer:U11_L|lpm_mult:Mult1" CBX_FILE_NAME="mult_m5t.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|SoundMixer:U11_L|lpm_mult:Mult9" CBX_FILE_NAME="mult_v6t.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|SoundMixer:U11_R|lpm_mult:Mult3" CBX_FILE_NAME="mult_m5t.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|ps2fifo:U05|fifo:U02|altsyncram:buff_rtl_0" CBX_FILE_NAME="altsyncram_4lg1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|ps2fifo:U06|fifo:U01|altsyncram:buff_rtl_0" CBX_FILE_NAME="altsyncram_2lg1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|vencode:U03|lpm_mult:Mult4|multcore:mult_core|mpar_add:padder|lpm_add_sub:adder[0]" CBX_FILE_NAME="add_sub_pah.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|SoundMixer:U11_L|lpm_mult:Mult2" CBX_FILE_NAME="mult_m5t.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|SoundMixer:U11_R|lpm_mult:Mult4" CBX_FILE_NAME="mult_o5t.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|ps2fifo:U06|fifo:U02|altsyncram:buff_rtl_0" CBX_FILE_NAME="altsyncram_4lg1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|vencode:U03|lpm_mult:Mult5|multcore:mult_core|mpar_add:padder|lpm_add_sub:adder[0]" CBX_FILE_NAME="add_sub_1ch.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|SoundMixer:U11_L|lpm_mult:Mult3" CBX_FILE_NAME="mult_o5t.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|SoundMixer:U11_R|lpm_mult:Mult5" CBX_FILE_NAME="mult_o5t.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|vencode:U03|lpm_mult:Mult6|multcore:mult_core|mpar_add:padder|lpm_add_sub:adder[0]" CBX_FILE_NAME="add_sub_2ch.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|SoundMixer:U11_L|lpm_mult:Mult4" CBX_FILE_NAME="mult_m5t.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|vencode:U03|lpm_mult:Mult0" CBX_FILE_NAME="mult_30t.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|vencode:U03|lpm_mult:Mult7|multcore:mult_core|mpar_add:padder|lpm_add_sub:adder[0]" CBX_FILE_NAME="add_sub_oah.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|SoundMixer:U11_L|lpm_mult:Mult5" CBX_FILE_NAME="mult_m5t.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|altsyncram:doubleByffer_rtl_0" CBX_FILE_NAME="altsyncram_atd1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|altsyncram:rtcRam_rtl_0" CBX_FILE_NAME="altsyncram_elg1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|fifo:U07|altsyncram:buff_rtl_0" CBX_FILE_NAME="altsyncram_s0h1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|vencode:U03|lpm_mult:Mult1" CBX_FILE_NAME="mult_30t.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|SoundMixer:U11_R|lpm_mult:Mult0" CBX_FILE_NAME="mult_m5t.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|fifo:U08|altsyncram:buff_rtl_0" CBX_FILE_NAME="altsyncram_utg1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|SoundMixer:U11_R|lpm_mult:Mult1" CBX_FILE_NAME="mult_o5t.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|SoundMixer:U11_R|lpm_mult:Mult9" CBX_FILE_NAME="mult_07t.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|fifo:U09|altsyncram:buff_rtl_0" CBX_FILE_NAME="altsyncram_utg1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|speccy2010_top|vencode:U03|lpm_mult:Mult2|multcore:mult_core|mpar_add:padder|lpm_add_sub:adder[0]" CBX_FILE_NAME="add_sub_1ch.tdf"/>
+	</PROJECT>
+</LOG_ROOT>

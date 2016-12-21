@@ -1,0 +1,41 @@
+
+State Machine - |speccy2010_top|ps2fifo:U06|ps2:U00|state
+Name state.stop state.parity state.data state.start state.write_request state.idle 
+state.idle 0 0 0 0 0 0 
+state.write_request 0 0 0 0 1 1 
+state.start 0 0 0 1 0 1 
+state.data 0 0 1 0 0 1 
+state.parity 0 1 0 0 0 1 
+state.stop 1 0 0 0 0 1 
+
+State Machine - |speccy2010_top|ps2fifo:U06|ps2:U00|debounce_state
+Name debounce_state.wait_stable debounce_state.fall debounce_state.rise debounce_state.stable 
+debounce_state.stable 0 0 0 0 
+debounce_state.rise 0 0 1 1 
+debounce_state.fall 0 1 0 1 
+debounce_state.wait_stable 1 0 0 1 
+
+State Machine - |speccy2010_top|ps2fifo:U05|ps2:U00|state
+Name state.stop state.parity state.data state.start state.write_request state.idle 
+state.idle 0 0 0 0 0 0 
+state.write_request 0 0 0 0 1 1 
+state.start 0 0 0 1 0 1 
+state.data 0 0 1 0 0 1 
+state.parity 0 1 0 0 0 1 
+state.stop 1 0 0 0 0 1 
+
+State Machine - |speccy2010_top|ps2fifo:U05|ps2:U00|debounce_state
+Name debounce_state.wait_stable debounce_state.fall debounce_state.rise debounce_state.stable 
+debounce_state.stable 0 0 0 0 
+debounce_state.rise 0 0 1 1 
+debounce_state.fall 0 1 0 1 
+debounce_state.wait_stable 1 0 0 1 
+
+State Machine - |speccy2010_top|sdram:U04|SdrRoutine
+Name SdrRoutine.SdrRoutine_WriteOne SdrRoutine.SdrRoutine_ReadOne SdrRoutine.SdrRoutine_RefreshAll SdrRoutine.SdrRoutine_Idle SdrRoutine.SdrRoutine_Init SdrRoutine.SdrRoutine_Null 
+SdrRoutine.SdrRoutine_Null 0 0 0 0 0 0 
+SdrRoutine.SdrRoutine_Init 0 0 0 0 1 1 
+SdrRoutine.SdrRoutine_Idle 0 0 0 1 0 1 
+SdrRoutine.SdrRoutine_RefreshAll 0 0 1 0 0 1 
+SdrRoutine.SdrRoutine_ReadOne 0 1 0 0 0 1 
+SdrRoutine.SdrRoutine_WriteOne 1 0 0 0 0 1 

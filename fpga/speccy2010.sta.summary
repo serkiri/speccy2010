@@ -1,0 +1,45 @@
+------------------------------------------------------------
+TimeQuest Timing Analyzer Summary
+------------------------------------------------------------
+
+Type  : Setup 'clk84'
+Slack : 0.210
+TNS   : 0.000
+
+Type  : Setup 'clk42'
+Slack : 0.498
+TNS   : 0.000
+
+Type  : Setup 'clk84_pin'
+Slack : 4.038
+TNS   : 0.000
+
+Type  : Hold 'clk42'
+Slack : 0.499
+TNS   : 0.000
+
+Type  : Hold 'clk84'
+Slack : 0.499
+TNS   : 0.000
+
+Type  : Hold 'clk84_pin'
+Slack : 2.565
+TNS   : 0.000
+
+Type  : Minimum Pulse Width 'clk84'
+Slack : 2.885
+TNS   : 0.000
+
+Type  : Minimum Pulse Width 'clk84_pin'
+Slack : 7.904
+TNS   : 0.000
+
+Type  : Minimum Pulse Width 'clk42'
+Slack : 8.837
+TNS   : 0.000
+
+Type  : Minimum Pulse Width 'clk20'
+Slack : 25.000
+TNS   : 0.000
+
+------------------------------------------------------------

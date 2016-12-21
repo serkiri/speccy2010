@@ -1,0 +1,14 @@
+Analysis & Synthesis Status : Successful - Mon Oct 10 19:00:39 2016
+Quartus II 64-Bit Version : 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition
+Revision Name : speccy2010
+Top-level Entity Name : speccy2010_top
+Family : Cyclone II
+Total logic elements : 7,978
+    Total combinational functions : 6,989
+    Dedicated logic registers : 2,742
+Total registers : 2742
+Total pins : 130
+Total virtual pins : 0
+Total memory bits : 55,552
+Embedded Multiplier 9-bit elements : 20
+Total PLLs : 1
