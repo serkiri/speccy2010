@@ -17,6 +17,7 @@ extern "C"
     #include "7xx_flash.h"
     void WDT_Kick();
     void __TRACE( const char *str );
+    char* itoa(int num, char* str);
 
 #ifdef __cplusplus
 }

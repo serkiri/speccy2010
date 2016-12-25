@@ -149,6 +149,7 @@ void SD_Init()
 
 void UpdateFirmware()
 {
+    char str[10];
     if( ( disk_status(0) & STA_NOINIT ) != 0 ) return;
 
     FIL newFirmware;
@@ -157,16 +158,29 @@ void UpdateFirmware()
         __TRACE( "Cannot open speccy2010.bin...\n" );
         return;
     }
-
+    __TRACE( "Started comparing.\n" );
     int pos;
     byte data;
     UINT res;
     byte *flashData = (byte*) MAIN_PROG_START;
+    byte olddata;
 
     for( pos = 0; pos < newFirmware.fsize; pos++ )
     {
         f_read( &newFirmware, &data, 1, &res );
-        if( data != *flashData++ ) break;
+        olddata = *flashData++;
+        if( data != olddata )
+        {
+            __TRACE("Found difference - at pos =");
+            __TRACE(itoa(pos, str));
+            __TRACE(", value on card = ");
+            __TRACE(itoa(data, str));
+            __TRACE(", value in flash = ");
+            __TRACE(itoa(olddata, str));
+            __TRACE("\n");
+
+             break;
+        }
     }
 
     if( pos >= newFirmware.fsize )
@@ -223,6 +237,7 @@ void UpdateFirmware()
 void JumpToMainProg()
 {
 	void (*MainProg)() = (void*) MAIN_PROG_START;
+	__TRACE( "Jumping to MainProg.\n" );
 	MainProg();
 }
 
@@ -232,7 +247,7 @@ int main()
 	pllStatusOK = MRCC_Config();
 
     UART0_Init( GPIO0, GPIO_Pin_11, GPIO0, GPIO_Pin_10 );
-    __TRACE( "Speccy2010 boot ver 1.1!\n" );
+    __TRACE( "Speccy2010 boot ver 1.2(extra log for Ricia)!\n" );
 
     SPI_Config();
     SD_Init();
@@ -261,4 +276,48 @@ void __TRACE( const char *str )
 
 void WDT_Kick()
 {
+}
+
+char* itoa(int num, char* str)
+{
+    int i = 0;
+    bool isNegative = false;
+
+    if (num == 0)
+    {
+        str[i++] = '0';
+        str[i] = '\0';
+        return str;
+    }
+
+    if (num < 0)
+    {
+        isNegative = true;
+        num = -num;
+    }
+
+    while (num != 0)
+    {
+        int rem = num % 10;
+        str[i++] = (rem > 9)? (rem-10) + 'a' : rem + '0';
+        num = num/10;
+    }
+
+    if (isNegative)
+        str[i++] = '-';
+
+    str[i] = '\0';
+
+    int start = 0;
+    int end = i - 1;
+    while (start < end)
+    {
+        char temp = *(str+end);
+        *(str+end) = *(str+start);
+        *(str+start) = temp;
+        start++;
+        end--;
+    }
+
+    return str;
 }
