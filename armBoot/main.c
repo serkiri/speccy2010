@@ -172,11 +172,11 @@ void UpdateFirmware()
         if( data != olddata )
         {
             __TRACE("Found difference - at pos =");
-            __TRACE(itoa(pos, str));
+            __TRACE(itoa(pos, str, 16));
             __TRACE(", value on card = ");
-            __TRACE(itoa(data, str));
+            __TRACE(itoa(data, str, 16));
             __TRACE(", value in flash = ");
-            __TRACE(itoa(olddata, str));
+            __TRACE(itoa(olddata, str, 16));
             __TRACE("\n");
 
              break;
@@ -278,7 +278,8 @@ void WDT_Kick()
 {
 }
 
-char* itoa(int num, char* str)
+
+char* itoa(int num, char* str, int base)
 {
     int i = 0;
     bool isNegative = false;
@@ -290,7 +291,7 @@ char* itoa(int num, char* str)
         return str;
     }
 
-    if (num < 0)
+    if (num < 0 && base == 10)
     {
         isNegative = true;
         num = -num;
@@ -298,9 +299,9 @@ char* itoa(int num, char* str)
 
     while (num != 0)
     {
-        int rem = num % 10;
+        int rem = num % base;
         str[i++] = (rem > 9)? (rem-10) + 'a' : rem + '0';
-        num = num/10;
+        num = num/base;
     }
 
     if (isNegative)
