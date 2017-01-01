@@ -165,30 +165,6 @@ void UpdateFirmware()
     byte *flashData = (byte*) MAIN_PROG_START;
     byte olddata;
 
-    for( pos = 0; pos < newFirmware.fsize; pos++ )
-    {
-        f_read( &newFirmware, &data, 1, &res );
-        olddata = *flashData++;
-        if( data != olddata )
-        {
-            __TRACE("Found difference - at pos =");
-            __TRACE(itoa(pos, str, 16));
-            __TRACE(", value on card = ");
-            __TRACE(itoa(data, str, 16));
-            __TRACE(", value in flash = ");
-            __TRACE(itoa(olddata, str, 16));
-            __TRACE("\n");
-
-             break;
-        }
-    }
-
-    if( pos >= newFirmware.fsize )
-    {
-        __TRACE( "Skipping firmware upgrade.\n" );
-        return;
-    }
-
     __TRACE( "Firmware upgrade started.\n" );
 
     FLASH_DeInit();
@@ -196,6 +172,9 @@ void UpdateFirmware()
     f_lseek( &newFirmware, 0 );
 
     dword data4;
+    dword data4_2;
+    char i;
+
     flashData = (byte*) MAIN_PROG_START;
 
     for( pos = 0; pos < newFirmware.fsize; pos += 4 )
@@ -224,7 +203,24 @@ void UpdateFirmware()
             FLASH_WaitForLastOperation();
         }
 
+        f_lseek( &newFirmware, pos );
         f_read( &newFirmware, &data4, 4, &res );
+
+        for (i=0; i<200; i++){
+            f_lseek( &newFirmware, pos );
+            f_read( &newFirmware, &data4_2, 4, &res );
+            if (data4 != data4_2){
+                __TRACE("Error memcard: addr=");
+                __TRACE(itoa(pos, str, 16));
+                __TRACE(" data1=");
+                __TRACE(itoa(data4, str, 16));
+                __TRACE(" data2=");
+                __TRACE(itoa(data4_2, str, 16));
+                __TRACE("\n");
+                break;
+            }
+
+        }
 
         FLASH_WriteWord( (dword) flashData - 0x20000000, data4 );
         FLASH_WaitForLastOperation();
@@ -247,7 +243,7 @@ int main()
 	pllStatusOK = MRCC_Config();
 
     UART0_Init( GPIO0, GPIO_Pin_11, GPIO0, GPIO_Pin_10 );
-    __TRACE( "Speccy2010 boot ver 1.2(extra log for Ricia)!\n" );
+    __TRACE( "Speccy2010 boot (memcard test 1)!\n" );
 
     SPI_Config();
     SD_Init();
