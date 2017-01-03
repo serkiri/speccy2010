@@ -220,7 +220,7 @@ int main()
 	pllStatusOK = MRCC_Config();
 
     UART0_Init( GPIO0, GPIO_Pin_11, GPIO0, GPIO_Pin_10 );
-    __TRACE( "Internal flash test with simple scramble\n" );
+    __TRACE( "Internal flash test with simple scramble v2 (bug fixed)\n" );
 
     eraseFlash();
     __TRACE( "Writing 0x55\n" );
@@ -267,7 +267,7 @@ void WDT_Kick()
 {
 }
 
-char* itoa(int num, char* str, int base)
+char* itoa(unsigned int num, char* str, int base)
 {
     int i = 0;
     bool isNegative = false;
