@@ -164,6 +164,7 @@ void UpdateFirmware()
     UINT res;
     byte *flashData = (byte*) MAIN_PROG_START;
     byte olddata;
+    char i;
 
     for( pos = 0; pos < newFirmware.fsize; pos++ )
     {
@@ -196,6 +197,7 @@ void UpdateFirmware()
     f_lseek( &newFirmware, 0 );
 
     dword data4;
+    dword storedData4;
     flashData = (byte*) MAIN_PROG_START;
 
     for( pos = 0; pos < newFirmware.fsize; pos += 4 )
@@ -226,9 +228,23 @@ void UpdateFirmware()
 
         f_read( &newFirmware, &data4, 4, &res );
 
-        FLASH_WriteWord( (dword) flashData - 0x20000000, data4 );
-        FLASH_WaitForLastOperation();
+        for (i=0; i<=200; i++){
+            FLASH_WriteWord( (dword) flashData - 0x20000000, data4 );
+            FLASH_WaitForLastOperation();
 
+            storedData4 = *flashData + (*(flashData + 1) << 8) + (*(flashData + 2) << 16) + (*(flashData + 3) << 24);
+            if (data4 != storedData4){
+                __TRACE("error writing at position: 0x");
+                __TRACE(itoa(flashData, str, 16));
+                __TRACE(" data=0x");
+                __TRACE(itoa(data4, str, 16));
+                __TRACE(" but stored=0x");
+                __TRACE(itoa(storedData4, str, 16));
+                __TRACE(", rewriting...\n");
+            } else {
+                break;
+            }
+        }
         flashData += 4;
     }
 
@@ -247,7 +263,7 @@ int main()
 	pllStatusOK = MRCC_Config();
 
     UART0_Init( GPIO0, GPIO_Pin_11, GPIO0, GPIO_Pin_10 );
-    __TRACE( "Speccy2010 boot ver 1.2(extra log for Ricia)!\n" );
+    __TRACE( "Speccy2010 boot ver 1.4(rewrite sequence for Ricia)!\n" );
 
     SPI_Config();
     SD_Init();
@@ -279,7 +295,7 @@ void WDT_Kick()
 }
 
 
-char* itoa(int num, char* str, int base)
+char* itoa(unsigned int num, char* str, int base)
 {
     int i = 0;
     bool isNegative = false;
