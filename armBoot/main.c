@@ -8,6 +8,8 @@
 
 #define MAIN_PROG_START 0x20008000
 
+char str[10];
+
 bool MRCC_Config(void)
 {
 	MRCC_DeInit();
@@ -147,9 +149,65 @@ void SD_Init()
     }
 }
 
+void writePage(unsigned int sector, unsigned int startAddr, unsigned int endAddr, FIL newFirmware){
+    char isError = 1;
+    dword data4;
+    dword storedData4;
+    int pos;
+    UINT res;
+    byte *flashData;
+    unsigned int realEndAddr;
+
+    if (newFirmware.fsize < startAddr - 0x20008000){
+        return;
+    }
+
+    if(newFirmware.fsize <= endAddr - 0x20008000){
+        realEndAddr = newFirmware.fsize + 0x20008000;
+    } else {
+        realEndAddr = endAddr;
+    }
+
+    while (isError){
+        __TRACE("page start=0x");
+        __TRACE(itoa(startAddr, str, 16));
+        __TRACE(" end=0x");
+        __TRACE(itoa(realEndAddr, str, 16));
+        __TRACE("\n");
+
+        isError = 0;
+        flashData = (byte*) startAddr;
+        FLASH_EraseSector(sector);
+        FLASH_WaitForLastOperation();
+        f_lseek(&newFirmware, startAddr - 0x20008000);
+        for( pos = 0; pos < realEndAddr - startAddr; pos += 4 ){
+            f_read( &newFirmware, &data4, 4, &res );
+//            if (pos == 0x40 && startAddr >= 0x20010000){
+//              FLASH_WriteWord( (dword) flashData - 0x20000000, 0x50505050 );
+//            } else {
+                FLASH_WriteWord( (dword) flashData - 0x20000000, data4 );
+//            }
+            FLASH_WaitForLastOperation();
+
+            storedData4 = *flashData + (*(flashData + 1) << 8) + (*(flashData + 2) << 16) + (*(flashData + 3) << 24);
+            if (data4 != storedData4){
+                __TRACE("error writing at position: 0x");
+                __TRACE(itoa(flashData, str, 16));
+                __TRACE(" data=0x");
+                __TRACE(itoa(data4, str, 16));
+                __TRACE(" but stored=0x");
+                __TRACE(itoa(storedData4, str, 16));
+                __TRACE("\n");
+                isError = 1;
+                break;
+            }
+            flashData += 4;
+        }
+    }
+}
+
 void UpdateFirmware()
 {
-    char str[10];
     if( ( disk_status(0) & STA_NOINIT ) != 0 ) return;
 
     FIL newFirmware;
@@ -158,13 +216,11 @@ void UpdateFirmware()
         __TRACE( "Cannot open speccy2010.bin...\n" );
         return;
     }
-    __TRACE( "Started comparing.\n" );
-    int pos;
+    unsigned int pos;
     byte data;
     UINT res;
     byte *flashData = (byte*) MAIN_PROG_START;
     byte olddata;
-    char i;
 
     for( pos = 0; pos < newFirmware.fsize; pos++ )
     {
@@ -190,70 +246,20 @@ void UpdateFirmware()
         return;
     }
 
-    __TRACE( "Firmware upgrade started.\n" );
+//    __TRACE( "Firmware upgrade started.\n" );
 
     FLASH_DeInit();
 
-    f_lseek( &newFirmware, 0 );
+    writePage(FLASH_BANK0_SECTOR4, 0x20008000, 0x20010000, newFirmware);
+    writePage(FLASH_BANK0_SECTOR5, 0x20010000, 0x20020000, newFirmware);
+    writePage(FLASH_BANK0_SECTOR6, 0x20020000, 0x20030000, newFirmware);
+    writePage(FLASH_BANK0_SECTOR7, 0x20030000, 0x20040000, newFirmware);
 
-    dword data4;
-    dword storedData4;
-    flashData = (byte*) MAIN_PROG_START;
-
-    for( pos = 0; pos < newFirmware.fsize; pos += 4 )
-    {
-        if( ( (dword) flashData & 0xfff ) == 0 ) __TRACE( "." );
-
-        if( (dword) flashData == 0x20008000 )
-        {
-            FLASH_EraseSector(FLASH_BANK0_SECTOR4);
-            FLASH_WaitForLastOperation();
-        }
-        else if( (dword) flashData == 0x20010000 )
-        {
-            FLASH_EraseSector(FLASH_BANK0_SECTOR5);
-            FLASH_WaitForLastOperation();
-        }
-        else if( (dword) flashData == 0x20020000 )
-        {
-            FLASH_EraseSector(FLASH_BANK0_SECTOR6);
-            FLASH_WaitForLastOperation();
-        }
-
-        else if( (dword) flashData == 0x20030000 )
-        {
-            FLASH_EraseSector(FLASH_BANK0_SECTOR7);
-            FLASH_WaitForLastOperation();
-        }
-
-        f_read( &newFirmware, &data4, 4, &res );
-
-        for (i=0; i<=200; i++){
-            FLASH_WriteWord( (dword) flashData - 0x20000000, data4 );
-            FLASH_WaitForLastOperation();
-
-            storedData4 = *flashData + (*(flashData + 1) << 8) + (*(flashData + 2) << 16) + (*(flashData + 3) << 24);
-            if (data4 != storedData4){
-                __TRACE("error writing at position: 0x");
-                __TRACE(itoa(flashData, str, 16));
-                __TRACE(" data=0x");
-                __TRACE(itoa(data4, str, 16));
-                __TRACE(" but stored=0x");
-                __TRACE(itoa(storedData4, str, 16));
-                __TRACE(", rewriting...\n");
-            } else {
-                break;
-            }
-        }
-        flashData += 4;
-    }
-
-    __TRACE( "Firmware upgrade finished.\n" );
+//    __TRACE( "Firmware upgrade finished.\n" );
 }
 void JumpToMainProg()
 {
 	void (*MainProg)() = (void*) MAIN_PROG_START;
-	__TRACE( "Jumping to MainProg.\n" );
 	MainProg();
 }
 
@@ -263,7 +269,7 @@ int main()
 	pllStatusOK = MRCC_Config();
 
     UART0_Init( GPIO0, GPIO_Pin_11, GPIO0, GPIO_Pin_10 );
-    __TRACE( "Speccy2010 boot ver 1.4(rewrite sequence for Ricia)!\n" );
+    __TRACE( "Speccy2010 boot ver 1.5(rewrite pages for Ricia)!\n" );
 
     SPI_Config();
     SD_Init();
