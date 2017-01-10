@@ -157,6 +157,7 @@ void writePage(unsigned int sector, unsigned int startAddr, unsigned int endAddr
     UINT res;
     byte *flashData;
     unsigned int realEndAddr;
+    int i;
 
     if (newFirmware.fsize < startAddr - 0x20008000){
         return;
@@ -169,7 +170,7 @@ void writePage(unsigned int sector, unsigned int startAddr, unsigned int endAddr
     }
 
     while (isError){
-        __TRACE("page start=0x");
+        __TRACE("\npage start=0x");
         __TRACE(itoa(startAddr, str, 16));
         __TRACE(" end=0x");
         __TRACE(itoa(realEndAddr, str, 16));
@@ -181,13 +182,16 @@ void writePage(unsigned int sector, unsigned int startAddr, unsigned int endAddr
         FLASH_WaitForLastOperation();
         f_lseek(&newFirmware, startAddr - 0x20008000);
         for( pos = 0; pos < realEndAddr - startAddr; pos += 4 ){
+            if( ( (dword) flashData & 0xfff ) == 0 ) __TRACE( "." );
             f_read( &newFirmware, &data4, 4, &res );
 //            if (pos == 0x40 && startAddr >= 0x20010000){
 //              FLASH_WriteWord( (dword) flashData - 0x20000000, 0x50505050 );
 //            } else {
                 FLASH_WriteWord( (dword) flashData - 0x20000000, data4 );
 //            }
-            FLASH_WaitForLastOperation();
+            for (i=0; i<=25000; i++){
+                FLASH_WaitForLastOperation();
+            }
 
             storedData4 = *flashData + (*(flashData + 1) << 8) + (*(flashData + 2) << 16) + (*(flashData + 3) << 24);
             if (data4 != storedData4){
@@ -242,7 +246,7 @@ void UpdateFirmware()
 
     if( pos >= newFirmware.fsize )
     {
-        __TRACE( "Skipping firmware upgrade.\n" );
+//        __TRACE( "Skipping firmware upgrade.\n" );
         return;
     }
 
@@ -269,7 +273,7 @@ int main()
 	pllStatusOK = MRCC_Config();
 
     UART0_Init( GPIO0, GPIO_Pin_11, GPIO0, GPIO_Pin_10 );
-    __TRACE( "Speccy2010 boot ver 1.5(rewrite pages for Ricia)!\n" );
+    __TRACE( "Speccy2010 boot ver 1.6(delays for Ricia)!\n" );
 
     SPI_Config();
     SD_Init();
