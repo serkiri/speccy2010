@@ -247,7 +247,7 @@ void UpdateFirmware()
     if( pos >= newFirmware.fsize )
     {
 //        __TRACE( "Skipping firmware upgrade.\n" );
-//        return;
+        return;
     }
 
 //    __TRACE( "Firmware upgrade started.\n" );
@@ -273,7 +273,7 @@ int main()
 	pllStatusOK = MRCC_Config();
 
     UART0_Init( GPIO0, GPIO_Pin_11, GPIO0, GPIO_Pin_10 );
-    __TRACE( "Speccy2010 boot ver 1.7*(er flag for Ricia)!\n" );
+    __TRACE( "speccyboot1.7\n" );
 
     SPI_Config();
     SD_Init();
