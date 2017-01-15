@@ -6,7 +6,7 @@
 
 #include "system.h"
 
-#define MAIN_PROG_START 0x200C0000
+#define MAIN_PROG_START 0x20008000
 
 char str[10];
 
@@ -171,8 +171,8 @@ void writePage(unsigned int sector, unsigned int startAddr, unsigned int endAddr
     while (isError){
         __TRACE("\npage start=0x");
         __TRACE(itoa(startAddr, str, 16));
-//        __TRACE(" end=0x");
-//        __TRACE(itoa(realEndAddr, str, 16));
+        __TRACE(" end=0x");
+        __TRACE(itoa(realEndAddr, str, 16));
         __TRACE("\n");
 
         isError = 0;
@@ -215,9 +215,9 @@ void UpdateFirmware()
     if( ( disk_status(0) & STA_NOINIT ) != 0 ) return;
 
     FIL newFirmware;
-    if( f_open( &newFirmware, "speccy2010_bankboot.bin", FA_READ ) != FR_OK )
+    if( f_open( &newFirmware, "speccy2010.bin", FA_READ ) != FR_OK )
     {
-        __TRACE( "Cannot open speccy2010_bankboot.bin...\n" );
+        __TRACE( "Cannot open speccy2010.bin...\n" );
         return;
     }
     unsigned int pos;
@@ -246,11 +246,11 @@ void UpdateFirmware()
 
     if( pos >= newFirmware.fsize )
     {
-//        __TRACE( "Skipping firmware upgrade.\n" );
+        __TRACE( "Skipping firmware upgrade.\n" );
         return;
     }
 
-//    __TRACE( "Firmware upgrade started.\n" );
+    __TRACE( "Firmware upgrade started.\n" );
 
     FLASH_DeInit();
 
@@ -259,7 +259,7 @@ void UpdateFirmware()
     writePage(FLASH_BANK0_SECTOR6, 0x20020000, 0x20030000, newFirmware);
     writePage(FLASH_BANK0_SECTOR7, 0x20030000, 0x20040000, newFirmware);
 
-//    __TRACE( "Firmware upgrade finished.\n" );
+    __TRACE( "Firmware upgrade finished.\n" );
 }
 void JumpToMainProg()
 {
@@ -273,12 +273,17 @@ int main()
 	pllStatusOK = MRCC_Config();
 
     UART0_Init( GPIO0, GPIO_Pin_11, GPIO0, GPIO_Pin_10 );
-    __TRACE( "bootloader0\n" );
+    __TRACE( "bootloaderbank1 ver2\n" );
+    __TRACE( "junk1junkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunk1234\n" );
+    __TRACE( "junk2junkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunk1234\n" );
+    __TRACE( "junk3junkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunk1234\n" );
+    __TRACE( "junk4junkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunk1234\n" );
+    __TRACE( "junk5junkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunkjunk1234\n" );
 
-//    SPI_Config();
-//    SD_Init();
+    SPI_Config();
+    SD_Init();
 
-//    UpdateFirmware();
+    UpdateFirmware();
 	JumpToMainProg();
 
 	return 0;
